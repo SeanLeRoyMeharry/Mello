@@ -20,6 +20,7 @@ export default class NotesContainer extends Component {
     componentDidMount() {
         this.setState({ loading: true });
 
+        // Initialize ref to databases
         this.chatRef = firebase.database().ref("messages/" + this.props.meetingId);
 
         this.chatRef.on('value', (snapshot) => {
@@ -28,9 +29,12 @@ export default class NotesContainer extends Component {
     }
 
     componentWillUnmount() {
+        // Remove listener to data base when unmounted
         this.chatRef.off();
     }
 
+    // Creates event listener for creating a new note when just "enter"
+    // is pressed
     handleKeyPress = (event) => {
         if (event.charCode === 13 && !event.shiftKey) {
             event.preventDefault();
@@ -47,10 +51,13 @@ export default class NotesContainer extends Component {
         }
     }
 
+    // Updates the state to keep track of the most recently
+    // selected message
     updateSelectedMessage = (message) => {
         this.setState({ selectedMessageId: message });
     }
 
+    // Toggles the delete modal
     toggle = (noteId) => {
         this.setState({
             isModalOpen: !this.state.isModalOpen,
@@ -62,6 +69,8 @@ export default class NotesContainer extends Component {
         this.setState({ message: event.target.value });
     }
 
+    // Deletes the current message from the database, and
+    // closes the delete modal
     delete = () => {
         this.chatRef.child(this.state.selectedMessageId).remove()
             .then(() => this.setState({ isModalOpen: !this.state.isModalOpen }));
@@ -111,7 +120,7 @@ export default class NotesContainer extends Component {
                 <NavbarBrand className="mr-auto" style={{color:"white"}}>Notes</NavbarBrand>
                 </Navbar>
                 <div className={css(styles.noteContainer)}>
-                    <ListGroup className={css(styles.listGroup)}>
+                    <ListGroup className={css(styles.listGroup)} aria-live="polite">
                         {noteItems}
                     </ListGroup>
                 </div>

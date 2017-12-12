@@ -22,10 +22,12 @@ export default class NoteItem extends Component {
         }
     }
 
+    // Shows buttons when list item on mouseover
     handleMouseEnter = () => {
         this.setState({ display: true });
     }
 
+    // Hides buttons when list item on mouseleave
     handleMouseLeave = () => {
         this.setState({ display: false });
     }
@@ -34,6 +36,8 @@ export default class NoteItem extends Component {
         this.setState({ edit: true });
     }
 
+    // Creates a new note/message when just "enter" 
+    // is pressed
     handleKeyPress = (event) => {
         if (event.charCode === 13 && !event.shiftKey && event.target.value !== "") {
             event.preventDefault();
@@ -110,9 +114,11 @@ class Buttons extends Component {
         this.toggleFn = null;
     }
 
+    // Initialize function to toggle delete modal
     componentWillMount() {
         this.toggleFn = this.props.toggle;
     }
+
     render() {
         const styles = StyleSheet.create({
             hide: {
@@ -167,11 +173,14 @@ class NoteContent extends Component {
         this.setState({ messageContent: event.target.value });
     }
 
+    // Returns the a string representing the HTML code of the text contents of this.props.note
     getHTMLCode() {
         let Remarkable = require('remarkable');
         let md = new Remarkable();
+        // Get markdown
         let content = md.render(this.props.note.message);
 
+        // Include regex to add links
         let regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_.~#?&//=]*)/g;
         let links = content.match(regex);
 
