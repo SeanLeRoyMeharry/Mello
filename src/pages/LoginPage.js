@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import AuthProvider from '../components/AuthProvider';
 import { Link} from 'react-router-dom';
 import {Container} from 'reactstrap';
+import userPhoto from '../images/user.png';
 
 export default class LoginPage extends Component {
 
@@ -35,7 +36,7 @@ export default class LoginPage extends Component {
                     <h1>Let's make you an account!</h1>
                     }
 
-                    <img style={styles.image} src="/images/user.png" alt="unknown user"/>
+                    <img style={styles.image} src={userPhoto} alt="unknown user"/>
                     <AuthProvider />
                     {
                         this.props.newAccount &&
