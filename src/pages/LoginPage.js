@@ -14,7 +14,8 @@ export default class LoginPage extends Component {
                 width: "35%",
                 maxWidth: 300,
                 height: "auto",
-                marginTop: 100
+                marginTop: 50,
+                marginBottom: 50
             },
             container : {
                 paddingTop: 100,
