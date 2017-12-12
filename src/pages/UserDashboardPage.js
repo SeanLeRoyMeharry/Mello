@@ -9,6 +9,11 @@ import { RingLoader } from 'react-spinners';
 
 import MeetingList from '../components/MeetingList.js';
 
+// Author: Matthew Li
+// Userdashboard page for Mello. Container component to hold
+// and display each of the dashboard components. Additionally,
+// sets up references to the firebase database and sends the data
+// down to various components.
 export default class UserDashboardPage extends Component {
 
     constructor(props) {
@@ -45,6 +50,7 @@ export default class UserDashboardPage extends Component {
         }
     }
 
+    // not used
     performAdd() {
         firebase.database().ref("members").once('value', (snapshot) => { console.log(snapshot.val()) }).catch((error) => {
             console.log(error);
@@ -52,6 +58,7 @@ export default class UserDashboardPage extends Component {
     }
 
     render() {
+        // Custom Styling
         const styles = {
             row: {
                 minHeight: "50%",

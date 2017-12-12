@@ -4,6 +4,11 @@ import Time from 'react-time';
 
 import firebase from 'firebase/app'
 
+
+// Author: Matthew Li
+// TaskList component renders a list of tasks passed to it. Tasks are 
+// represented as TaskItems which are individual components.
+
 export default class TaskList extends Component {
 
     constructor(props) {
@@ -13,6 +18,7 @@ export default class TaskList extends Component {
         }
     }
 
+    // Initializes the task items and produces the output.
     render() {
         if (this.props.tasks) {
             let items = Object.keys(this.props.tasks);
@@ -23,6 +29,7 @@ export default class TaskList extends Component {
                 '2': 2
             }
 
+            // Sorts tasks first based on progress, priority, and then date.
             items.sort((a, b) => {
                 if (order[this.props.tasks[a].progress] < order[this.props.tasks[b].progress]) {
                     return -1;
@@ -52,6 +59,9 @@ export default class TaskList extends Component {
     }
 }
 
+// Author: Matthew Li
+// Taskitem component displays the contents of one task.
+// Each task has various fields
 class TaskItem extends Component {
     constructor(props) {
         super(props);
@@ -62,6 +72,7 @@ class TaskItem extends Component {
         };
     }
 
+    // Creates references to the firebase database to gather information about the task
     componentDidMount() {
         this.taskRef = firebase.database().ref("tasks").child(this.props.task.assignedTo).child(this.props.task.userTaskId);
         this.meetingTaskRef = firebase.database().ref("meetings").child(this.props.task.meetingId).child("tasks").child(this.props.task.meetingTaskId);
@@ -71,11 +82,13 @@ class TaskItem extends Component {
         })
     }
 
+    // Kills the references to the firebase database.
     componentWillUnmount() {
         this.taskRef.off();
         this.meetingTaskRef.off();
     }
 
+    // Toggles the task open / closed
     toggle() {
         this.setState({ collapse: !this.state.collapse });
     }
@@ -84,6 +97,7 @@ class TaskItem extends Component {
         this.setState({ taskStatus: this.state.taskStatus + 1 });
     }
 
+    // Updates the task ref progress, "todo, in progress, complete"
     changeProgress() {
         let tempTask = this.props.task;
         tempTask.progress = (tempTask.progress + 1) % 3;
@@ -92,11 +106,14 @@ class TaskItem extends Component {
         this.meetingTaskRef.set(tempTask);
     }
 
+    // Performs rendering of actual component.
     render() {
+        // Reference arrays for index/value
         const progressColor = ["primary", "warning", "success"];
         const progressText = ["TODO", "In Progress", "Completed"];
         const iconPriority = ["fa-arrow-down", "fa-minus", "fa-arrow-up"];
 
+        // Custom styling
         const styles = {
             button: {
                 width: "100%"

@@ -12,8 +12,15 @@ import MultiSelect from './MultiSelect'
 
 import firebase from 'firebase/app';
 
+// Author: Matthew Li
+// Component serves as the modal in which user can create new meetings.
+// Modal is rendered on both the meeting dashboard page and the user
+// dashboard page. Contains various inputs for defining the meeting. 
+// Updates the firebase database accordingly to give users permissions etc.
+
 class MeetingModal extends React.Component {
 
+    // Defaults for Modal.
     constructor(props) {
         super(props);
         this.state = {
@@ -31,6 +38,8 @@ class MeetingModal extends React.Component {
         this.toggle = this.toggle.bind(this);
     }
 
+    // Creates a reference to the firebase database in order to 
+    // populate the dropdown for users to invite.
     componentDidMount() {
         this.userRef = firebase.database().ref("members");
         this.userRef.on("value", (snapshot) => {
@@ -42,10 +51,13 @@ class MeetingModal extends React.Component {
         });
     }
 
+    // Kills the user ref.
     componentWillUnmount() {
         this.userRef.off();
     }
 
+    // Toggles the modal open and closed. Resets to defaults each time 
+    // toggle is triggered.
     toggle() {
         this.setState({
             modal: !this.state.modal,
@@ -57,6 +69,8 @@ class MeetingModal extends React.Component {
         });
     }
 
+    // Logic for adding meetings to the firebase database as well as updating
+    // each user invited's permissions.
     createMeeting() {
         if (this.allValid()) {
             let tempDate = this.state.date;
@@ -101,31 +115,38 @@ class MeetingModal extends React.Component {
         this.setState({ blocking: !this.state.blocking });
     }
 
+    // Verifies whether the input is valid or not
     allValid() {
         return (this.state.description.length > 0 &&
             this.state.title.length > 0 && this.state.time.length > 0)
     }
 
+    // Handles data updating
     handleDateSelect(date) {
         this.setState({ date: date });
     }
 
+    // Handles time updating
     handleTimeSelect(e) {
         this.setState({ time: e.target.value });
     }
 
+    // Handles header updates
     handleTitleChange(e) {
         this.setState({ title: e.target.value });
     }
 
+    // Handles description updates
     handleDescriptionChange(e) {
         this.setState({ description: e.target.value });
     }
 
+    // handles invitees changes
     handleSelectChange(value) {
         this.setState({ selectedUsers: value })
     }
 
+    // Renders the Modal
     render() {
         const styles = {
             marginTop: {

@@ -4,9 +4,13 @@ import { Link} from 'react-router-dom';
 import {Container} from 'reactstrap';
 import userPhoto from '../images/user.png';
 
+// Author: Matthew Li
+// Basic login page for Mello. Handles both Google and
+// Facebook login.
 export default class LoginPage extends Component {
 
     render() {
+        // Custom Styles
         const styles = {
             image : {
                 marginLeft: "auto",

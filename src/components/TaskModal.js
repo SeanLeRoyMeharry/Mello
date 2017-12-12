@@ -13,8 +13,12 @@ import MultiSelect from './MultiSelect'
 
 import firebase from 'firebase/app';
 
+// Author: Matthew Li
+// TaskModal component allows the user to create new tasks
+// and assign the task to other members.
 export default class TaskModal extends Component {
 
+    // Sets up default state
     constructor(props) {
         super(props);
         this.state = {
@@ -33,6 +37,7 @@ export default class TaskModal extends Component {
         this.toggle = this.toggle.bind(this);
     }
 
+    // Creates references to the firebase database.
     componentDidMount() {
         this.userRef = firebase.database().ref("members");
         this.userRef.on("value", (snapshot) => {
@@ -44,12 +49,14 @@ export default class TaskModal extends Component {
         });
     }
 
+    // Updates task modal with a pre-populated title
     componentWillReceiveProps(nextProps) {
         if (nextProps.showModal) {
             this.toggleWithTitle(nextProps.title);
         }
     }
 
+    // Kills the references.
     componentWillUnmount() {
         this.userRef.off();
     }
@@ -70,6 +77,7 @@ export default class TaskModal extends Component {
         this.toggleWithTitle("");
     }
 
+    // Logic for creating a task and assigning it to the assigned members.
     createTask() {
         if (this.allValid()) {
             let tempDate = this.state.date;
@@ -110,43 +118,55 @@ export default class TaskModal extends Component {
         }
     }
 
+    // Toggles the blocking ui, to ensure user does not mess with UI while
+    // creating the event
     toggleBlocking() {
         this.setState({ blocking: !this.state.blocking });
     }
 
+    // Verifies whether the current input state is valid or not.
     allValid() {
         return (this.state.rSelected != null && this.state.title.length > 0 && this.state.time.length > 0 && this.state.selectedUsers.length > 0)
     }
 
+    // Updates date input
     handleDateSelect(date) {
         this.setState({ date: date });
     }
 
+    // Updates time input
     handleTimeSelect(e) {
         this.setState({ time: e.target.value });
     }
 
+    // Updates title input
     handleTitleChange(e) {
         this.setState({ title: e.target.value });
     }
 
+    // Updates description input
     handleDescriptionChange(e) {
         this.setState({ description: e.target.value });
     }
 
+    // Updates select change
     handleSelectChange(value) {
         this.setState({ selectedUsers: value })
     }
 
+    // Updates dynamic input change
     handleDynamicInput(value) {
         this.setState({ requirements: value });
     }
 
+    // Handles radio button selection
     onRadioBtnClick(rSelected) {
         this.setState({ rSelected });
     }
 
+    // Renders UI modal.
     render() {
+        // Custom component styles
         const styles = {
             marginTop: {
                 marginTop: 5

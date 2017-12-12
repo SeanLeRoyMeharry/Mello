@@ -5,10 +5,16 @@ import Time from 'react-time'
 
 import firebase from 'firebase/app';
 
+// Author: Matthew Li
+// Component renders and displays the user's meetings in a list format.
+// Each list item, is a meeting card which can be clicked to open revealing
+// extra information about the given meeting.
+
 export default class MeetingList extends Component {
 
     render() {
 
+        // Checks whether meetins have been passed into the component
         if (this.props.meetings && this.props.meetings != null) {
             const styles = {
                 overFlow: {
@@ -17,11 +23,13 @@ export default class MeetingList extends Component {
                     overflowY: "auto"
                 }
             }
-            
+
+            // Sorts meetings based on their date field.
             let sortedMeetings = Object.keys(this.props.meetings).sort((a, b) => {
                 return this.props.meetings[a].date - this.props.meetings[b].date;
             })
 
+            // Produces MeetingItems for each meeting. 
             let meetingItems = sortedMeetings.map((id) => {
                 return <MeetingItem key={id} id={this.props.meetings[[id]].id} />
             });
@@ -44,6 +52,11 @@ export default class MeetingList extends Component {
     }
 }
 
+// Author: Matthew Li
+// MeetingItem component displays the information for a given meeting. 
+// The component queries the database to display the various members,
+// attending the meeting as well as other information about the meeting.
+
 class MeetingItem extends Component {
 
     constructor(props) {
@@ -63,26 +76,30 @@ class MeetingItem extends Component {
         });
     }
 
+    // Creates calls to the database for member's display names.
     getMembers() {
         let tempMembers = [];
-        if(this.state.meeting.members && this.state.meeting.members!=null){
-        Object.keys(this.state.meeting.members).map((key) => {
-            this.memberRef.child(this.state.meeting.members[key]).once("value", (snapshot) => {
-                tempMembers.push(snapshot.val());
-            })
-        });
-        }   
+        if (this.state.meeting.members && this.state.meeting.members != null) {
+            Object.keys(this.state.meeting.members).map((key) => {
+                this.memberRef.child(this.state.meeting.members[key]).once("value", (snapshot) => {
+                    tempMembers.push(snapshot.val());
+                })
+            });
+        }
         return tempMembers;
     }
 
+    // Toggles the card open/close
     toggle() {
         this.setState({ collapse: !this.state.collapse });
     }
 
+    // Kills the meetingRef
     componentWillUnmount() {
         this.meetingRef.off();
     }
-    
+
+    // Renders the actual meeting component
     render() {
         if (this.state.meeting) {
             let memberNames = this.getMembers();

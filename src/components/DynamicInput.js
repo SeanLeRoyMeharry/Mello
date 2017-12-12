@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 
 import { Button, Input, Row, Col } from 'reactstrap';
 
+// Author: Matthew Li
+// Component functions as a dynamic input. User is able to add more
+// fields by pressing "Add button". Output is handled by returning array, 
+// with each index representing user input of one field.
+
 export default class DynamicInput extends Component {
     constructor(props) {
         super(props);

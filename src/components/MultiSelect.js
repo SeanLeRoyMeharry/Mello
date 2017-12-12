@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import Select from 'react-select'
 import 'react-select/dist/react-select.css';
 
+// Author: Matthew Li
+// Wrapper class for react-select multiselect component.
+
 export default class MultiSelect extends Component {
 
 	render() {
